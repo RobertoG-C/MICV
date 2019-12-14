@@ -2,6 +2,7 @@ package dad.javafx.model;
 
 import java.time.LocalDate;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -28,7 +29,7 @@ public class Titulo {
 	public final ObjectProperty<LocalDate> desdeProperty() {
 		return this.desde;
 	}
-
+	@XmlAttribute
 	@XmlJavaTypeAdapter(LocalDateAdapter.class)
 	public final LocalDate getDesde() {
 		return this.desdeProperty().get();
@@ -41,7 +42,7 @@ public class Titulo {
 	public final ObjectProperty<LocalDate> hastaProperty() {
 		return this.hasta;
 	}
-
+	@XmlAttribute
 	@XmlJavaTypeAdapter(LocalDateAdapter.class)
 	public final LocalDate getHasta() {
 		return this.hastaProperty().get();

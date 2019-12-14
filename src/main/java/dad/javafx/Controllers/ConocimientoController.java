@@ -75,7 +75,7 @@ public class ConocimientoController implements Initializable {
 		nivelCol.setCellFactory(ComboBoxTableCell.forTableColumn(Nivel.values()));
 
 
-//		eliminarButton.disableProperty().bind(table.getSelectionModel().selectedItemProperty().isNull());
+		eliminarButton.disableProperty().bind(table.getSelectionModel().selectedItemProperty().isNull());
 		Bindings.bindBidirectional(cv.habilidadesProperty(), table.itemsProperty());
 
 	}

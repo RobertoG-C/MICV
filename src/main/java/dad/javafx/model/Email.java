@@ -1,5 +1,7 @@
 package dad.javafx.model;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -10,7 +12,7 @@ public final StringProperty direccionProperty() {
 	return this.direccion;
 }
 
-
+@XmlAttribute
 public final String getDireccion() {
 	return this.direccionProperty().get();
 }

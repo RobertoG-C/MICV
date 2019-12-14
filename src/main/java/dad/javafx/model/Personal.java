@@ -33,7 +33,7 @@ public class Personal {
 public final StringProperty identificacioonProperty() {
 	return this.identificacion;
 }
-
+@XmlAttribute
 public final String getIdentificacion() {
 	return this.identificacioonProperty().get();
 }
@@ -45,7 +45,7 @@ public final void setIdentificacion(final String identificacioon) {
 public final StringProperty nombreProperty() {
 	return this.nombre;
 }
-@XmlAttribute
+
 public final String getNombre() {
 	return this.nombreProperty().get();
 }
@@ -57,7 +57,6 @@ public final void setNombre(final String nombre) {
 public final StringProperty apellidosProperty() {
 	return this.apellidos;
 }
-@XmlAttribute
 public final String getApellidos() {
 	return this.apellidosProperty().get();
 }

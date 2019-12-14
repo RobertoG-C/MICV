@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cv>
+    <contacto/>
+    <Experiencias/>
+    <personal identificacion="45">
+        <apellidos>GL</apellidos>
+        <codigoPostal>12345</codigoPostal>
+        <dirrecion>BLA BLA BLA</dirrecion>
+        <fechanacimiento>2019-12-19</fechanacimiento>
+        <localidad>ARONA</localidad>
+        <nacionalidad>
+            <denominacion>albano</denominacion>
+        </nacionalidad>
+        <nombre>R</nombre>
+        <pais>Argelia</pais>
+    </personal>
+</cv>

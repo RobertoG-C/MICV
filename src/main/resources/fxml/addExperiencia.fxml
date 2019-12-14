@@ -20,7 +20,7 @@
   </rowConstraints>
    <children>
       <Label text="Denominación" />
-      <Label text="Organizaador" GridPane.rowIndex="1" />
+      <Label text="Empleador" GridPane.rowIndex="1" />
       <TextField fx:id="denominacionText" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
       <Label text="Desde" GridPane.rowIndex="2" />
       <Label text="Hasta" GridPane.rowIndex="3" />

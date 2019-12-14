@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cv>
+    <contacto/>
+    <experiencia desde="2019-12-11" hasta="2019-12-18">
+        <denominacion>54545</denominacion>
+        <empleador>2323</empleador>
+    </experiencia>
+    <formacion desde="2019-12-11" hasta="2019-12-24">
+        <denominacion>45</denominacion>
+        <organizador>678</organizador>
+    </formacion>
+    <habilidades denominacion="ingles" nivel="AVANZADO"/>
+    <habilidades certificacion="B2" denominacion="ALEMAN" nivel="AVANZADO"/>
+    <personal/>
+</cv>

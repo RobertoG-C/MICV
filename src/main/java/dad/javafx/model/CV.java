@@ -51,7 +51,7 @@ public final ListProperty<Titulo> formacionProperty() {
 	return this.formacion;
 }
 
-@XmlElement(name = "Titulo")
+@XmlElement(name = "formacion")
 public final ObservableList<Titulo> getFormacion() {
 	return this.formacionProperty().get();
 }
@@ -63,8 +63,7 @@ public final void setFormacion(final ObservableList<Titulo> formacion) {
 public final ListProperty<Experiencia> experienciasProperty() {
 	return this.experiencias;
 }
-@XmlElement(name = "Experiencia")
-@XmlElementWrapper(name ="Experiencias")
+@XmlElement(name = "experiencia")
 public final ObservableList<Experiencia> getExperiencias() {
 	return this.experienciasProperty().get();
 }
@@ -76,8 +75,7 @@ public final void setExperiencias(final ObservableList<Experiencia> experiencias
 public final ListProperty<Idioma> habilidadesProperty() {
 	return this.habilidades;
 }
-@XmlElement(name = "Conocimiento")
-@XmlElementWrapper(name ="Conocimientos")
+@XmlElement(name = "habilidades")
 public final ObservableList<Idioma> getHabilidades() {
 	return this.habilidadesProperty().get();
 }

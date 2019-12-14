@@ -93,9 +93,9 @@ public class rootController implements Initializable {
 	private ExperienciaController experienciaController = new ExperienciaController();
 	private ConocimientoController conocimientoController = new ConocimientoController();
 
-
 	private static CV model = new CV();
-
+	private CV modelaux=new CV();
+	private  File file=null;
 	public rootController() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/rootView.fxml"));
 		loader.setController(this);
@@ -130,7 +130,6 @@ public class rootController implements Initializable {
 		model.getFormacion().clear();
 		model.getExperiencias().clear();
 		model.getHabilidades().clear();
-		
 
 	}
 
@@ -140,16 +139,36 @@ public class rootController implements Initializable {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Resource File");
 		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text Files", "*.cv", "*.xml"));
-		try {
 			if (fileChooser != null)
-				model = JAXBUtil.load(CV.class, fileChooser.showOpenDialog(null));
-			System.out.println(model.getPersonal().getApellidos());
-			personalController = new PersonalController();
-			personalTab.setContent(personalController.getView());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+				
+			try {
+				file=fileChooser.showOpenDialog(null);
+				modelaux = JAXBUtil.load(CV.class, file);
+	            model.getPersonal().setIdentificacion( modelaux.getPersonal().getIdentificacion());
+	            model.getPersonal().setNombre(modelaux.getPersonal().getNombre());
+	            model.getPersonal().setApellidos(modelaux.getPersonal().getApellidos());
+	            model.getPersonal().setDirrecion(modelaux.getPersonal().getDirrecion());
+	            model.getPersonal().setCodigoPostal(modelaux.getPersonal().getCodigoPostal());
+	            model.getPersonal().setFechanacimiento(modelaux.getPersonal().getFechanacimiento());
+	            model.getPersonal().setLocalidad(modelaux.getPersonal().getLocalidad());
+	            model.getPersonal().setNacionalidad(modelaux.getPersonal().nacionalidadProperty());
+	            model.getPersonal().setPais(modelaux.getPersonal().getPais());
+	            model.getContacto().setEmails(modelaux.getContacto().emailsProperty());
+	            model.getContacto().setTelefono(modelaux.getContacto().telefonoProperty());
+	            model.getContacto().setWebs(modelaux.getContacto().websProperty());
+	            model.setFormacion(modelaux.formacionProperty());
+	            model.setExperiencias(modelaux.experienciasProperty());
+	            model.setHabilidades(modelaux.habilidadesProperty());
+
+
+	        } catch (Exception e) {
+	            Alert alert = new Alert(AlertType.ERROR);
+	            alert.setTitle("OPEN ERROR");
+	            alert.setHeaderText("FAIL TO LOAD");
+	            alert.setContentText(e.getMessage());
+	            alert.showAndWait();
+	        }
+	
 
 	}
 
@@ -186,7 +205,7 @@ public class rootController implements Initializable {
 	@FXML
 	void onSaveAction(ActionEvent event) throws Exception {
 		String nombreFichero = "";
-
+		if (file==null) {
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setTitle("Dame un nombre");
 		dialog.setHeaderText("Se requiere un nombre para guardar el .cv");
@@ -196,11 +215,13 @@ public class rootController implements Initializable {
 
 		if (result.isPresent()) {
 			nombreFichero = result.get();
-
-			JAXBUtil.save(model, new File(nombreFichero + ".cv"));
+			file= new File(nombreFichero + ".cv");
+			JAXBUtil.save(model,file);
 
 		}
-
+		} else {
+			JAXBUtil.save(model, file);
+		}
 	}
 
 	public VBox getView() {

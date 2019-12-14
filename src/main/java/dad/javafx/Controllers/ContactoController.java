@@ -75,8 +75,6 @@ public class ContactoController implements Initializable {
 	@FXML
 	private Button removeWeb;
 
-	private CV cv= rootController.getModel();
-
 	public ContactoController() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacto.fxml"));
 		loader.setController(this);
@@ -85,23 +83,24 @@ public class ContactoController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+
+		rootController.getModel().getContacto().emailsProperty().bindBidirectional(emailTable.itemsProperty());
+		rootController.getModel().getContacto().telefonoProperty().bindBidirectional(telefonoView.itemsProperty());
+		rootController.getModel().getContacto().websProperty().bindBidirectional(webTable.itemsProperty());
+
+		urlCol.setCellValueFactory(v -> v.getValue().urlProperty());
+		emailCol.setCellValueFactory(v -> v.getValue().direccionProperty());
 		telefonoCol.setCellValueFactory(v -> v.getValue().numeroProperty());
 		tipoCol.setCellValueFactory(v -> v.getValue().tipoProperty());
-		emailCol.setCellValueFactory(v -> v.getValue().direccionProperty());
-		urlCol.setCellValueFactory(v -> v.getValue().urlProperty());
 
+		urlCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		telefonoCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		tipoCol.setCellFactory(ComboBoxTableCell.forTableColumn(TipoTelefono.values()));
-		emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		urlCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
-		cv.getContacto().telefonoProperty().bindBidirectional(telefonoView.itemsProperty());
-		cv.getContacto().emailsProperty().bindBidirectional(emailTable.itemsProperty());
-		cv.getContacto().websProperty().bindBidirectional(webTable.itemsProperty());
-		
-		removeTelefono.disableProperty().bind(telefonoView.getSelectionModel().selectedItemProperty().isNull());
-		removeEmail.disableProperty().bind(emailTable.getSelectionModel().selectedItemProperty().isNull());
-		removeWeb.disableProperty().bind(webTable.getSelectionModel().selectedItemProperty().isNull());
+//		removeTelefono.disableProperty().bind(telefonoView.getSelectionModel().selectedItemProperty().isNull());
+//		removeEmail.disableProperty().bind(emailTable.getSelectionModel().selectedItemProperty().isNull());
+//		removeWeb.disableProperty().bind(webTable.getSelectionModel().selectedItemProperty().isNull());
 
 	}
 
@@ -112,12 +111,11 @@ public class ContactoController implements Initializable {
 		dialog.setHeaderText("Crear una nueva dirreción de correo");
 		dialog.setContentText("E-mail:");
 
-		// Traditional way to get the response value.
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()) {
 			Email tempEmail = new Email();
 			tempEmail.setDireccion(result.get());
-			cv.getContacto().getEmails().addAll(tempEmail);
+			rootController.getModel().getContacto().getEmails().addAll(tempEmail);
 		}
 	}
 
@@ -138,7 +136,7 @@ public class ContactoController implements Initializable {
 			dialog.getDialogPane().setContent(newPhone.getView());
 			Optional<ButtonType> result = dialog.showAndWait();
 			if (result.get() == aplicarButton) {
-				cv.getContacto().getTelefono().add(newPhone.getModel());
+				rootController.getModel().getContacto().getTelefono().add(newPhone.getModel());
 			} else if (result.get() == cerrarButton)
 				;
 
@@ -160,7 +158,7 @@ public class ContactoController implements Initializable {
 		if (result.isPresent()) {
 			Web tempWeb = new Web();
 			tempWeb.setUrl(result.get());
-			cv.getContacto().getWebs().addAll(tempWeb);
+			rootController.getModel().getContacto().getWebs().addAll(tempWeb);
 		}
 	}
 

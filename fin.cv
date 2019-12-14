@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cv>
+    <contacto>
+        <emails direccion="r32432"/>
+        <telefono numero="45" tipo="DOCIMICLIO"/>
+        <webs url="http://"/>
+    </contacto>
+    <personal identificacion="45"/>
+</cv>
