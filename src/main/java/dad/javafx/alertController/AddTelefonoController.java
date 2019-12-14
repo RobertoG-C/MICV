@@ -36,7 +36,7 @@ public class AddTelefonoController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		model.numeroProperty().bindBidirectional(numero.textProperty());
+		model.numeroProperty().bind(numero.textProperty());
 		model.tipoProperty().bind(tipoCombo.getSelectionModel().selectedItemProperty());
 		tipoCombo.getItems().setAll(TipoTelefono.values());
 		tipoCombo.getSelectionModel().selectFirst();

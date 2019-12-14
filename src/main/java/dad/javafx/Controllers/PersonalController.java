@@ -12,8 +12,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import dad.javafx.model.CV;
 import dad.javafx.model.Nacionalidad;
 import dad.javafx.model.Personal;
+import dad.javafx.root.rootController;
 import javafx.beans.binding.ListExpression;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -71,29 +73,32 @@ public class PersonalController implements Initializable {
 	@FXML
 	private Button removeButton;
 	
-	private Personal model =new Personal();
-	private ListProperty<Nacionalidad> alertList =new SimpleListProperty<Nacionalidad>(FXCollections.observableArrayList());
-
+	private CV cv= rootController.getModel();
+	
+	 private ListProperty<Nacionalidad> alertList =new SimpleListProperty<Nacionalidad>(FXCollections.observableArrayList());
+	 private ListProperty<String> paisList=new SimpleListProperty<String>(FXCollections.observableArrayList());
+	 
 	public PersonalController() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Personal.fxml"));
 		loader.setController(this);
 		loader.load();
 	}
+	
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		dniField.textProperty().bindBidirectional(model.identificacioonProperty());
-		nombreField.textProperty().bindBidirectional(model.nombreProperty());
-		apellidosField.textProperty().bindBidirectional(model.apellidosProperty());
-		fechaPicker.valueProperty().bindBidirectional(model.fechanacimientoProperty());
-		dirrecionArea.textProperty().bindBidirectional(model.dirrecionProperty());
-		nacionalidadList.itemsProperty().bindBidirectional(model.nacionalidadProperty());
-		model.nacionalidadSelectedProperty().bind(nacionalidadList.getSelectionModel().selectedItemProperty());
-		codPostalField.textProperty().bindBidirectional(model.codigoPostalProperty());
-		localidadField.textProperty().bindBidirectional(model.localidadProperty());
-		paisCombo.valueProperty().bindBidirectional(model.paisProperty());
-		paisCombo.itemsProperty().bind(model.paisListProperty());
-		removeButton.disableProperty().bind(model.nacionalidadSelectedProperty().isNull());
+		dniField.textProperty().bindBidirectional(cv.getPersonal().identificacioonProperty());
+		nombreField.textProperty().bindBidirectional(cv.getPersonal().nombreProperty());
+		apellidosField.textProperty().bindBidirectional(cv.getPersonal().apellidosProperty());
+		fechaPicker.valueProperty().bindBidirectional(cv.getPersonal().fechanacimientoProperty());
+		dirrecionArea.textProperty().bindBidirectional(cv.getPersonal().dirrecionProperty());
+		nacionalidadList.itemsProperty().bindBidirectional(cv.getPersonal().nacionalidadProperty());
+		cv.getPersonal().nacionalidadSelectedProperty().bind(nacionalidadList.getSelectionModel().selectedItemProperty());
+		codPostalField.textProperty().bindBidirectional(cv.getPersonal().codigoPostalProperty());
+		localidadField.textProperty().bindBidirectional(cv.getPersonal().localidadProperty());
+		paisCombo.valueProperty().bindBidirectional(cv.getPersonal().paisProperty());
+		paisCombo.itemsProperty().bind(paisList);
+		removeButton.disableProperty().bind(cv.getPersonal().nacionalidadSelectedProperty().isNull());
 		cargaPaises();
 		paisCombo.setPromptText("Seleciona un País");
 		cargaNacionalidad();
@@ -111,14 +116,14 @@ public class PersonalController implements Initializable {
 		// Traditional way to get the response value.
 		Optional<Nacionalidad> result = dialog.showAndWait();
 		if (result.isPresent()){
-		   model.getNacionalidad().add(result.get());
+		   cv.getPersonal().getNacionalidad().add(result.get());
 		}
 	}
 
 	@FXML
 	void onRemoveAction(ActionEvent event) {
-		if (model.getNacionalidad().size()>0) {
-		model.getNacionalidad().remove(model.getNacionalidadSelected());
+		if (cv.getPersonal().getNacionalidad().size()>0) {
+		cv.getPersonal().getNacionalidad().remove(cv.getPersonal().getNacionalidadSelected());
 		nacionalidadList.getSelectionModel().clearSelection();
 		}
 	}
@@ -126,10 +131,7 @@ public class PersonalController implements Initializable {
 	public GridPane getView() {
 		return view;
 	}
-	
-	public Personal getModel() {
-		return model;
-	}
+
 	private  void cargaPaises() {
 		final String SEPARATOR="\n";
 
@@ -142,7 +144,7 @@ public class PersonalController implements Initializable {
 		         while (null!=line) {
 		            String [] fields = line.split(SEPARATOR);
 		            line = br.readLine();
-		            model.getPaisList().add(line);
+		            paisList.add(line);
 		         }
 		         
 		      } catch (Exception e) {

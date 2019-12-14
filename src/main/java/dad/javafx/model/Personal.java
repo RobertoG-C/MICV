@@ -2,6 +2,11 @@ package dad.javafx.model;
 
 import java.time.LocalDate;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import dad.javafx.persistenciaxml.LocalDateAdapter;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -11,6 +16,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+@XmlType
 public class Personal {
 	
  private StringProperty identificacion=new SimpleStringProperty();
@@ -23,10 +29,7 @@ public class Personal {
  private ObjectProperty<LocalDate> fechanacimiento =new SimpleObjectProperty<LocalDate>();
  private ListProperty<Nacionalidad> nacionalidad=new SimpleListProperty<Nacionalidad>(FXCollections.observableArrayList());
  private ObjectProperty<Nacionalidad> nacionalidadSelected=new SimpleObjectProperty<Nacionalidad>();
- private ListProperty<String> paisList=new SimpleListProperty<String>(FXCollections.observableArrayList());
- 
- 
- 
+
 public final StringProperty identificacioonProperty() {
 	return this.identificacion;
 }
@@ -42,7 +45,7 @@ public final void setIdentificacion(final String identificacioon) {
 public final StringProperty nombreProperty() {
 	return this.nombre;
 }
-
+@XmlAttribute
 public final String getNombre() {
 	return this.nombreProperty().get();
 }
@@ -54,7 +57,7 @@ public final void setNombre(final String nombre) {
 public final StringProperty apellidosProperty() {
 	return this.apellidos;
 }
-
+@XmlAttribute
 public final String getApellidos() {
 	return this.apellidosProperty().get();
 }
@@ -114,7 +117,7 @@ public final void setPais(final String pais) {
 public final ObjectProperty<LocalDate> fechanacimientoProperty() {
 	return this.fechanacimiento;
 }
-
+@XmlJavaTypeAdapter(LocalDateAdapter.class)
 public final LocalDate getFechanacimiento() {
 	return this.fechanacimientoProperty().get();
 }
@@ -135,24 +138,10 @@ public final void setNacionalidad(final ObservableList<Nacionalidad> nacionalida
 	this.nacionalidadProperty().set(nacionalidad);
 }
 
-public final ListProperty<String> paisListProperty() {
-	return this.paisList;
-}
-
-
-public final ObservableList<String> getPaisList() {
-	return this.paisListProperty().get();
-}
-
-
-public final void setPaisList(final ObservableList<String> paisList) {
-	this.paisListProperty().set(paisList);
-}
 
 public final ObjectProperty<Nacionalidad> nacionalidadSelectedProperty() {
 	return this.nacionalidadSelected;
 }
-
 
 public final Nacionalidad getNacionalidadSelected() {
 	return this.nacionalidadSelectedProperty().get();

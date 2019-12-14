@@ -6,6 +6,10 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 import dad.javafx.Controllers.ConocimientoController;
 import dad.javafx.Controllers.ContactoController;
 import dad.javafx.Controllers.ExperienciaController;
@@ -15,6 +19,7 @@ import dad.javafx.model.CV;
 import dad.javafx.model.Personal;
 import dad.javafx.persistenciaxml.JAXBUtil;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -31,6 +36,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 
 public class rootController implements Initializable {
 
@@ -84,7 +92,9 @@ public class rootController implements Initializable {
 	private FormacionController formacionController = new FormacionController();
 	private ExperienciaController experienciaController = new ExperienciaController();
 	private ConocimientoController conocimientoController = new ConocimientoController();
-	private CV model = new CV();
+
+
+	private static CV model = new CV();
 
 	public rootController() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/rootView.fxml"));
@@ -104,25 +114,42 @@ public class rootController implements Initializable {
 
 	@FXML
 	void onNewAction(ActionEvent event) {
-		personalController.getModel().setIdentificacion("");
-		personalController.getModel().setNombre("");
-		personalController.getModel().setApellidos("");
-		personalController.getModel().setCodigoPostal("");
-		personalController.getModel().setDirrecion("");
-		personalController.getModel().setFechanacimiento(null);
-		personalController.getModel().setLocalidad("");
-		personalController.getModel().setNacionalidad(null);
-		personalController.getModel().setPais("");
-		contactoController.getModel().setTelefono(FXCollections.observableArrayList());
-		contactoController.getModel().setEmails(FXCollections.observableArrayList());
-		contactoController.getModel().setWebs(FXCollections.observableArrayList());
-		formacionController.getModel().set(FXCollections.observableArrayList());
-		experienciaController.getModel().set(FXCollections.observableArrayList());
-		conocimientoController.getModel().set(FXCollections.observableArrayList());
+
+		model.getPersonal().setIdentificacion(null);
+		model.getPersonal().setNombre("");
+		model.getPersonal().setApellidos("");
+		model.getPersonal().setCodigoPostal("");
+		model.getPersonal().setDirrecion("");
+		model.getPersonal().setFechanacimiento(null);
+		model.getPersonal().setLocalidad("");
+		model.getPersonal().setNacionalidad(null);
+		model.getPersonal().setPais("");
+		model.getContacto().getTelefono().clear();
+		model.getContacto().getEmails().clear();
+		model.getContacto().getWebs().clear();
+		model.getFormacion().clear();
+		model.getExperiencias().clear();
+		model.getHabilidades().clear();
+		
+
 	}
 
 	@FXML
 	void onOpenAction(ActionEvent event) {
+
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Open Resource File");
+		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text Files", "*.cv", "*.xml"));
+		try {
+			if (fileChooser != null)
+				model = JAXBUtil.load(CV.class, fileChooser.showOpenDialog(null));
+			System.out.println(model.getPersonal().getApellidos());
+			personalController = new PersonalController();
+			personalTab.setContent(personalController.getView());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -141,12 +168,24 @@ public class rootController implements Initializable {
 
 	@FXML
 	void onSaveASAction(ActionEvent event) throws Exception {
-		
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Save Resource File");
+		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text Files", "*.cv"));
+		try {
+
+			File file = fileChooser.showSaveDialog(null);
+			if (fileChooser != null)
+				JAXBUtil.save(model, file);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@FXML
 	void onSaveAction(ActionEvent event) throws Exception {
-	/*	String nombreFichero = "";
+		String nombreFichero = "";
 
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setTitle("Dame un nombre");
@@ -157,9 +196,10 @@ public class rootController implements Initializable {
 
 		if (result.isPresent()) {
 			nombreFichero = result.get();
-		}
 
-		JAXBUtil.save(model, new File(nombreFichero + ".cv"));*/
+			JAXBUtil.save(model, new File(nombreFichero + ".cv"));
+
+		}
 
 	}
 
@@ -167,4 +207,7 @@ public class rootController implements Initializable {
 		return view;
 	}
 
+	public static CV getModel() {
+		return model;
+	}
 }

@@ -6,8 +6,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-
-
 public class JAXBUtil {
 	
 	public static void save(Object rootObject, File target) throws Exception {

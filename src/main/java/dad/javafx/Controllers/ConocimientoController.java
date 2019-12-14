@@ -7,8 +7,10 @@ import java.util.ResourceBundle;
 
 import dad.javafx.alertController.AddConocimiento;
 import dad.javafx.alertController.addIdioma;
+import dad.javafx.model.CV;
 import dad.javafx.model.Idioma;
 import dad.javafx.model.Nivel;
+import dad.javafx.root.rootController;
 import javafx.fxml.Initializable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ListProperty;
@@ -56,7 +58,7 @@ public class ConocimientoController implements Initializable {
 	@FXML
 	private TableColumn<Idioma, Nivel> nivelCol;
 
-	private ListProperty<Idioma> model = new SimpleListProperty<>(this, "model", FXCollections.observableArrayList());
+	private CV cv=rootController.getModel();
 
 	public ConocimientoController() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ConocimientoView.fxml"));
@@ -71,10 +73,10 @@ public class ConocimientoController implements Initializable {
 		denominaCol.setCellValueFactory(v -> v.getValue().denominacionProperty());
 		denominaCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		nivelCol.setCellFactory(ComboBoxTableCell.forTableColumn(Nivel.values()));
-		
 
-		eliminarButton.disableProperty().bind(table.getSelectionModel().selectedItemProperty().isNull());
-		Bindings.bindBidirectional(model, table.itemsProperty());
+
+//		eliminarButton.disableProperty().bind(table.getSelectionModel().selectedItemProperty().isNull());
+		Bindings.bindBidirectional(cv.habilidadesProperty(), table.itemsProperty());
 
 	}
 
@@ -93,7 +95,7 @@ public class ConocimientoController implements Initializable {
 
 		Optional<ButtonType> result = dialog.showAndWait();
 		if (result.get() == okButton) {
-			model.add(newConocimiento.getModel());
+			cv.getHabilidades().add(newConocimiento.getModel());
 		}
 	}
 
@@ -111,7 +113,7 @@ public class ConocimientoController implements Initializable {
 
 		Optional<ButtonType> result = dialog.showAndWait();
 		if (result.get() == okButton) {
-			model.add(idiomaView.getModel());
+			cv.getHabilidades().add(idiomaView.getModel());
 		}
 	}
 
@@ -129,9 +131,6 @@ public class ConocimientoController implements Initializable {
 			table.getSelectionModel().clearSelection();
 	}
 
-	public ListProperty<Idioma> getModel() {
-		return model;
-	}
 
 	public BorderPane getView() {
 		return view;

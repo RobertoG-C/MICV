@@ -31,6 +31,10 @@ public final TipoTelefono getTipo() {
 public final void setTipo(final TipoTelefono tipo) {
 	this.tipoProperty().set(tipo);
 }
-
+ 	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return getNumero()+getTipo();
+	}
 
 }

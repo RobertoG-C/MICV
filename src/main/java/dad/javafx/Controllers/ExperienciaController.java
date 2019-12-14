@@ -11,8 +11,10 @@ import java.util.ResourceBundle;
 
 import dad.javafx.alertController.addExperienciaController;
 import dad.javafx.alertController.addFormacionController;
+import dad.javafx.model.CV;
 import dad.javafx.model.Experiencia;
 import dad.javafx.model.Titulo;
+import dad.javafx.root.rootController;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -34,6 +36,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import javafx.util.converter.LocalDateStringConverter;
 
 public class ExperienciaController implements Initializable {
 	@FXML
@@ -63,7 +66,7 @@ public class ExperienciaController implements Initializable {
 	@FXML
 	private TableColumn<Experiencia, String> empleadorCol;
 	
-	private ListProperty<Experiencia> model =new SimpleListProperty<Experiencia>(FXCollections.observableArrayList());
+	private CV cv=rootController.getModel();
 
 	public ExperienciaController() throws IOException {
 
@@ -75,9 +78,6 @@ public class ExperienciaController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		Callback<TableColumn<Experiencia, LocalDate>, TableCell<Experiencia, LocalDate>> dateCellFactory = (
-				TableColumn<Experiencia, LocalDate> param) -> new DateEditingCell();
-
 		desdeCol.setCellValueFactory(v -> v.getValue().desdeProperty());
 		hastaCol.setCellValueFactory(v -> v.getValue().hastaProperty());
 		denominaCol.setCellValueFactory(v -> v.getValue().denominacionProperty());
@@ -85,10 +85,10 @@ public class ExperienciaController implements Initializable {
 
 		denominaCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		empleadorCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		desdeCol.setCellFactory(dateCellFactory);
-		hastaCol.setCellFactory(dateCellFactory);
+		desdeCol.setCellFactory(TextFieldTableCell.forTableColumn(new LocalDateStringConverter()));
+		hastaCol.setCellFactory(TextFieldTableCell.forTableColumn(new LocalDateStringConverter()));
 		
-		model.bindBidirectional(table.itemsProperty());
+		cv.experienciasProperty().bindBidirectional(table.itemsProperty());
 		eliminarButton.disableProperty().bind(table.getSelectionModel().selectedItemProperty().isNull());
 	}
 
@@ -110,7 +110,7 @@ public class ExperienciaController implements Initializable {
 			dialog.getDialogPane().setContent(newExp.getView());
 			Optional<ButtonType> result = dialog.showAndWait();
 			if (result.get() == aplicarButton) {
-				model.add(newExp.getModel());
+				cv.getExperiencias().add(newExp.getModel());
 			} else if (result.get() == cerrarButton)
 				;
 
@@ -143,67 +143,4 @@ public class ExperienciaController implements Initializable {
 		return view;
 	}
  
-	public ListProperty<Experiencia> getModel() {
-		return model;
-	}
-	class DateEditingCell extends TableCell<Experiencia, LocalDate> {
-
-		private DatePicker datePicker;
-
-		private DateEditingCell() {
-		}
-
-		@Override
-		public void startEdit() {
-			if (!isEmpty()) {
-				super.startEdit();
-				createDatePicker();
-				setText(null);
-				setGraphic(datePicker);
-			}
-		}
-
-		@Override
-		public void cancelEdit() {
-			super.cancelEdit();
-
-			setText(getDate().toString());
-			setGraphic(null);
-		}
-
-		@Override
-		public void updateItem(LocalDate item, boolean empty) {
-			super.updateItem(item, empty);
-
-            if (empty) {
-                setText(null);
-                setGraphic(null);
-            } else {
-                if (isEditing()) {
-                    if (datePicker != null) {
-                        datePicker.setValue(getDate());
-                    }
-                    setText(null);
-                    setGraphic(datePicker);
-                } else {
-                    setText(getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)));
-                    setGraphic(null);
-                }
-            }
-        }
-
-        private void createDatePicker() {
-            datePicker = new DatePicker(getDate());
-            datePicker.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
-            datePicker.setOnAction((e) -> {
-                System.out.println("Committed: " + datePicker.getValue().toString());
-                commitEdit(datePicker.getValue());
-            });
-
-        }
-
-        private LocalDate getDate() {
-            return getItem() == null ? LocalDate.now() : LocalDate.now(ZoneId.systemDefault().systemDefault());
-        }
-    }
 }
