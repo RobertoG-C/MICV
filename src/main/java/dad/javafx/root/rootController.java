@@ -114,22 +114,31 @@ public class rootController implements Initializable {
 
 	@FXML
 	void onNewAction(ActionEvent event) {
-		file=null;
-		model.getPersonal().setIdentificacion(null);
-		model.getPersonal().setNombre("");
-		model.getPersonal().setApellidos("");
-		model.getPersonal().setCodigoPostal("");
-		model.getPersonal().setDirrecion("");
-		model.getPersonal().setFechanacimiento(null);
-		model.getPersonal().setLocalidad("");
-		model.getPersonal().setNacionalidad(null);
-		model.getPersonal().setPais("");
-		model.getContacto().getTelefono().clear();
-		model.getContacto().getEmails().clear();
-		model.getContacto().getWebs().clear();
-		model.getFormacion().clear();
-		model.getExperiencias().clear();
-		model.getHabilidades().clear();
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Nuevo");
+		alert.setHeaderText("Sino guardo los datos,puede perderlos");
+		alert.setContentText("¿Seguró que abrir uno nuevo?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			file=null;
+			model.getPersonal().setIdentificacion(null);
+			model.getPersonal().setNombre("");
+			model.getPersonal().setApellidos("");
+			model.getPersonal().setCodigoPostal("");
+			model.getPersonal().setDirrecion("");
+			model.getPersonal().setFechanacimiento(null);
+			model.getPersonal().setLocalidad("");
+			model.getPersonal().setNacionalidad(null);
+			model.getPersonal().setPais("");
+			model.getContacto().getTelefono().clear();
+			model.getContacto().getEmails().clear();
+			model.getContacto().getWebs().clear();
+			model.getFormacion().clear();
+			model.getExperiencias().clear();
+			model.getHabilidades().clear();
+		}
+		
 
 	}
 
@@ -197,8 +206,7 @@ public class rootController implements Initializable {
 				JAXBUtil.save(model, file);
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 
 		}
 	}
 
