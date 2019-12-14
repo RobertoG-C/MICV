@@ -114,7 +114,7 @@ public class rootController implements Initializable {
 
 	@FXML
 	void onNewAction(ActionEvent event) {
-
+		file=null;
 		model.getPersonal().setIdentificacion(null);
 		model.getPersonal().setNombre("");
 		model.getPersonal().setApellidos("");
